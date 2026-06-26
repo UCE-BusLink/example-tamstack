@@ -1,40 +1,69 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# JAMstack Blog
+
+A tech blog built with **Next.js** and deployed on **Vercel**, demonstrating the JAMstack architecture with Static Site Generation (SSG).
+
+## Stack
+
+- **Framework:** Next.js 14 (Pages Router)
+- **Rendering:** Static Site Generation via `getStaticProps` / `getStaticPaths`
+- **Styling:** CSS Modules
+- **Deployment:** Vercel
+- **CI/CD:** GitHub Actions
+
+## Project Structure
+
+```
+jamstack-blog/
+├── pages/
+│   ├── index.js           # Home page — lists all posts
+│   ├── _app.js            # Global layout (Header + Footer)
+│   └── posts/
+│       └── [slug].js      # Dynamic post page (SSG)
+├── components/
+│   ├── Header.jsx
+│   ├── PostCard.jsx
+│   └── Footer.jsx
+├── lib/
+│   └── api.js             # Data layer — returns post list and individual posts
+├── styles/
+│   └── globals.css
+└── .github/
+    └── workflows/
+        └── deploy.yml     # CI/CD pipeline
+```
+
+## How JAMstack Works Here
+
+At build time, Next.js calls `getStaticProps` and `getStaticPaths` to pre-render every page into static HTML files. No server runs at request time — files are served directly from a CDN.
+
+```
+push to main → GitHub Actions → npm run build → static HTML → Vercel CDN
+```
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Build for Production
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+```bash
+npm run build
+npm start
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Deploy
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Every push to `main` triggers the GitHub Actions workflow in `.github/workflows/deploy.yml`, which builds the project and deploys it to Vercel automatically.
 
-## Learn More
+To configure the deployment, add these secrets to your GitHub repository:
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+| Secret | Description |
+|---|---|
+| `VERCEL_TOKEN` | Your Vercel API token |
+| `VERCEL_ORG_ID` | Your Vercel organization ID |
+| `VERCEL_PROJECT_ID` | Your Vercel project ID |
